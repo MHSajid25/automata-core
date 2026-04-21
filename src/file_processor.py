@@ -11,7 +11,7 @@ def process_file(input_file, output_file):
         return
 
     try:
-        with open(input_file, 'r') as infile, open(output_file, 'w', newline='') as outfile:
+        with open(input_file, 'r', newline='') as infile, open(output_file, 'w', newline='') as outfile:
             reader = csv.reader(infile)
             writer = csv.writer(outfile)
 
@@ -24,24 +24,53 @@ def process_file(input_file, output_file):
     except Exception as e:
         print(f"Error processing file: {e}")
 
+def process_directory(input_dir, output_dir):
+    if not os.path.exists(input_dir):
+        print(f"Input directory not found: {input_dir}")
+        return
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    for file_name in os.listdir(input_dir):
+        if file_name.endswith(".csv"):
+            input_path = os.path.join(input_dir, file_name)
+            output_path = os.path.join(output_dir, f"cleaned_{file_name}")
+            process_file(input_path, output_path)
+
 def main():
     parser = argparse.ArgumentParser(description="CSV File Processing Utility")
 
     parser.add_argument(
         "--input",
-        required=True,
         help="Path to input CSV file"
     )
 
     parser.add_argument(
         "--output",
-        required=True,
         help="Path to output CSV file"
+    )
+
+    parser.add_argument(
+        "--input_dir",
+        help="Path to input directory containing CSV files"
+    )
+
+    parser.add_argument(
+        "--output_dir",
+        help="Path to output directory for cleaned CSV files"
     )
 
     args = parser.parse_args()
 
-    process_file(args.input, args.output)
+    if args.input_dir and args.output_dir:
+        process_directory(args.input_dir, args.output_dir)
+    elif args.input and args.output:
+        process_file(args.input, args.output)
+    else:
+        print("Usage:")
+        print("  Single file: python src/file_processor.py --input data.csv --output cleaned.csv")
+        print("  Directory:   python src/file_processor.py --input_dir raw_files --output_dir cleaned_files")
 
 if __name__ == "__main__":
     main()
