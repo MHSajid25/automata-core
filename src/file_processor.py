@@ -1,13 +1,16 @@
 import csv
 import argparse
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 def clean_row(row):
     return [item.strip().lower() for item in row]
 
 def process_file(input_file, output_file):
     if not os.path.exists(input_file):
-        print(f"Input file not found: {input_file}")
+        logging.warning(f"Input file not found: {input_file}")
         return
 
     try:
@@ -19,14 +22,14 @@ def process_file(input_file, output_file):
                 cleaned = clean_row(row)
                 writer.writerow(cleaned)
 
-        print(f"Processed file saved to {output_file}")
+        logging.info(f"Processed file saved to {output_file}")
 
     except Exception as e:
-        print(f"Error processing file: {e}")
+        logging.error(f"Error processing file: {e}")
 
 def process_directory(input_dir, output_dir):
     if not os.path.exists(input_dir):
-        print(f"Input directory not found: {input_dir}")
+        logging.warning(f"Input directory not found: {input_dir}")
         return
 
     if not os.path.exists(output_dir):
@@ -68,9 +71,9 @@ def main():
     elif args.input and args.output:
         process_file(args.input, args.output)
     else:
-        print("Usage:")
-        print("  Single file: python src/file_processor.py --input data.csv --output cleaned.csv")
-        print("  Directory:   python src/file_processor.py --input_dir raw_files --output_dir cleaned_files")
+        logging.info("Usage:")
+        logging.info("  Single file: python src/file_processor.py --input data.csv --output cleaned.csv")
+        logging.info("  Directory:   python src/file_processor.py --input_dir raw_files --output_dir cleaned_files")
 
 if __name__ == "__main__":
     main()
