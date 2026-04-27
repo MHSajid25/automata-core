@@ -47,25 +47,10 @@ def process_directory(input_dir, output_dir):
 def main():
     parser = argparse.ArgumentParser(description="CSV File Processing Utility")
 
-    parser.add_argument(
-        "--input",
-        help="Path to input CSV file"
-    )
-
-    parser.add_argument(
-        "--output",
-        help="Path to output CSV file"
-    )
-
-    parser.add_argument(
-        "--input_dir",
-        help="Path to input directory containing CSV files"
-    )
-
-    parser.add_argument(
-        "--output_dir",
-        help="Path to output directory for cleaned CSV files"
-    )
+    parser.add_argument("--input", help="Path to input CSV file")
+    parser.add_argument("--output", help="Path to output CSV file")
+    parser.add_argument("--input_dir", help="Path to input directory containing CSV files")
+    parser.add_argument("--output_dir", help="Path to output directory for cleaned CSV files")
 
     args = parser.parse_args()
 
